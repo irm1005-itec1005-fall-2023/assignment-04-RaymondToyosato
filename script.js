@@ -37,6 +37,87 @@ function inititialise() {
   console.log("App successfully initialised");
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('todo-form');
+  const input = document.getElementById('todo-input');
+  let todos = [];
+
+  function addTodo(text) {
+    const now = new Date();
+    const todo = {
+      id: Date.now(),
+      text: text,
+      completed: false,
+      initTime: now.toLocaleString()
+    };
+    todos.push(todo);
+    renderTodos();
+  }
+
+  function renderTodos() {
+    const todoItems = todos.filter(todo => !todo.completed);
+    const completedItems = todos.filter(todo => todo.completed);
+
+    document.getElementById('todo-list').innerHTML =
+      todoItems.length ?
+        todoItems.map(todo => createTodoHtml(todo, false)).join('') :
+        '<li class="empty">No pending tasks</li>';
+
+    document.getElementById('completed-list').innerHTML =
+      completedItems.length ?
+        completedItems.map(todo => createTodoHtml(todo, true)).join('') :
+        '<li class="empty">No completed tasks</li>';
+  }
+
+function createTodoHtml(todo, isCompleted) {
+    return `<li class="${isCompleted ? 'completed' : ''}" data-id="${todo.id}">
+                <span class="text">${todo.text}</span>
+                <span class="init-time">Added on: ${todo.initTime}</span>
+                <button class="delete-btn" onclick="deleteTodo(${todo.id})">Delete</button>
+            </li>`;
+}
+
+  window.deleteTodo = function (id) {
+    todos = todos.filter(todo => todo.id !== id);
+    renderTodos();
+  };
+
+  window.toggleTodo = function (id) {
+    todos = todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
+    renderTodos();
+  };
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const todoText = input.value.trim();
+    if (todoText) {
+      addTodo(todoText);
+      input.value = '';
+    }
+  });
+
+  document.getElementById('todo-list').addEventListener('click', function (e) {
+    if (e.target.tagName === 'LI') {
+      const id = parseInt(e.target.dataset.id);
+      toggleTodo(id);
+    }
+  });
+
+  document.getElementById('completed-list').addEventListener('click', function (e) {
+    if (e.target.tagName === 'LI') {
+      const id = parseInt(e.target.dataset.id);
+      toggleTodo(id);
+    }
+  });
+
+  renderTodos();
+});
+
 //
 // Inits & Event Listeners
 //

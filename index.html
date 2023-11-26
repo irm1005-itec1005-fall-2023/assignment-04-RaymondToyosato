@@ -23,6 +23,7 @@
   <!-- Set the Favicon  -->
   <link rel="icon" href="./images/favicon/rocket.svg" type="image/svg+xml" />
 </head>
+
 <body>
 
   <!--
@@ -42,10 +43,24 @@
 
   <main>
     <div id="app"></div>
+    <div class="container">
+      <header>
+
+      </header>
+      <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a new todo...">
+        <button type="submit">Add Todo</button>
+      </form>
+      <h2>Todo</h2>
+      <ul id="todo-list"></ul>
+      <h2>Completed</h2>
+      <ul id="completed-list"></ul>
+    </div>
   </main>
 
   <!-- Add JavaScript File -->
   <script src="./script.js"></script>
 
 </body>
+
 </html>
